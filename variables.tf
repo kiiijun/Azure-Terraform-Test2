@@ -42,3 +42,25 @@ variable "spoke_aks_subnet_address_prefix" {
   default = ["10.2.0.0/24"]
   type    = list(string)
 }
+
+//firewall 변수
+variable "firewall_name" {
+  default = "azfw"
+  type    = string
+}
+variable "firewall_zones" {
+  default = []
+  type    = list(string)
+}
+variable "firewall_threat_intel_mode" {
+  default = "Alert"
+  type    = string
+}
+variable "firewall_sku_name" {
+  default = "AZFW_VNet"
+  type    = string
+}
+variable "firewall_sku_tier" {
+  default = "Standard"
+  type    = string
+}

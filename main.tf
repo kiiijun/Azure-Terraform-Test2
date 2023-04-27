@@ -65,3 +65,18 @@ module "vnet_peering" {
   peering_name_1_to_2 = "${var.hub_vnet_name}To${var.spoke_vnet_name}"
   peering_name_2_to_1 = "${var.spoke_vnet_name}To${var.hub_vnet_name}"
 }
+
+module "firewall" {
+  source              = "./modules/firewall"
+  name                = var.firewall_name
+  resource_group_name = azurerm_resource_group.rg.name
+  zones               = var.firewall_zones
+  threat_intel_mode   = var.firewall_threat_intel_mode
+  location            = var.location
+  sku_name            = var.firewall_sku_name
+  sku_tier            = var.firewall_sku_tier
+  pip_name            = "${var.firewall_name}-pip"
+  subnet_id           = module.hub_network.subnet_ids["AzureFirewallSubnet"]
+  # log_analytics_workspace_id   = module.log_analytics_workspace.id
+  # log_analytics_retention_days = var.log_analytics_retention_days
+}
