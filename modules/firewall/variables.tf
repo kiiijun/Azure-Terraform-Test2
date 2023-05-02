@@ -43,7 +43,7 @@ variable "zones" {
 variable "pip_name" {
   description = "Specifies the firewall public IP name"
   type        = string
-  default     = "azure-fw-ip"
+  default     = "azure-fw-pip"
 }
 
 variable "subnet_id" {
