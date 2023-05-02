@@ -86,3 +86,16 @@ module "firewall" {
   pip_name            = "${var.firewall_name}-pip"
   subnet_id           = module.hub_network.subnet_ids["AzureFirewallSubnet"]
 }
+module "vpngw" {
+  source              = "./modules/virtual_network_gateway"
+  name                = var.vpngw_name
+  resource_group_name = azurerm_resource_group.rg[0].name
+  location            = var.location
+  pip_name            = "${var.vpngw_name}-pip"
+  type                = var.vpngw_type
+  vpn_type            = var.vpngw_vpn_type
+  active_active       = var.vpngw_active_active
+  enable_bgp          = var.vpngw_enable_bgp
+  sku                 = var.vpngw_sku
+  subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
+}

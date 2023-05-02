@@ -63,7 +63,7 @@ variable "vm_subnet_address_prefix" {
 
 //firewall 변수
 variable "firewall_name" {
-  default = "azfw"
+  default = "hub-azfw"
   type    = string
 }
 variable "firewall_zones" {
@@ -81,4 +81,24 @@ variable "firewall_sku_name" {
 variable "firewall_sku_tier" {
   default = "Standard"
   type    = string
+}
+
+//vpngw 변수
+variable "vpngw_name" {
+  default = "hub-vpngw"
+}
+variable "vpngw_type" {
+  default = "Vpn"
+}
+variable "vpngw_vpn_type" {
+  default = "RouteBased"
+}
+variable "vpngw_active_active" {
+  default = false
+}
+variable "vpngw_enable_bgp" {
+  default = false
+}
+variable "vpngw_sku" {
+  default = "VpnGw2"
 }
