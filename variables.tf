@@ -102,3 +102,17 @@ variable "vpngw_enable_bgp" {
 variable "vpngw_sku" {
   default = "VpnGw2"
 }
+
+//aks 변수
+variable "cluster_name" {
+  default = "aks"
+}
+variable "default_node_pool_name" {
+  default = "default"
+}
+variable "default_node_pool_node_count" {
+  default = 1
+}
+variable "default_node_pool_vm_size" {
+  default = "Standard_B2s"
+}

@@ -99,3 +99,14 @@ module "vpngw" {
   sku                 = var.vpngw_sku
   subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
 }
+module "aks" {
+  source                       = "./modules/kubernetes"
+  cluster_name                 = var.cluster_name
+  dns_prefix                   = lower(var.cluster_name)
+  resource_group_name          = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
+  location                     = var.location
+  default_node_pool_name       = var.default_node_pool_name
+  default_node_pool_node_count = var.default_node_pool_node_count
+  default_node_pool_vm_size    = var.default_node_pool_vm_size
+
+}
