@@ -86,33 +86,79 @@ variable "firewall_sku_tier" {
 //vpngw 변수
 variable "vpngw_name" {
   default = "hub-vpngw"
+  type    = string
+
+
 }
 variable "vpngw_type" {
   default = "Vpn"
+  type    = string
 }
 variable "vpngw_vpn_type" {
   default = "RouteBased"
+  type    = string
 }
 variable "vpngw_active_active" {
   default = false
+  type    = bool
 }
 variable "vpngw_enable_bgp" {
   default = false
+  type    = bool
 }
 variable "vpngw_sku" {
   default = "VpnGw2"
+  type    = string
 }
 
 //aks 변수
 variable "cluster_name" {
   default = "aks"
+  type    = string
 }
+variable "network_plugin" {
+  default = "azure"
+  type    = string
+}
+variable "private_cluster_enabled" {
+  default = true
+  type    = bool
+}
+variable "sku_tier" {
+  default = "Free"
+  type    = string
+}
+
+//default_node_pool 변수
 variable "default_node_pool_name" {
   default = "default"
+  type    = string
 }
 variable "default_node_pool_node_count" {
   default = 1
+  type    = number
 }
 variable "default_node_pool_vm_size" {
   default = "Standard_B2s"
+  type    = string
+}
+variable "default_node_pool_zones" {
+  default = []
+  type    = list(string)
+}
+variable "default_node_pool_enable_auto_scaling" {
+  default = true
+  type    = bool
+}
+variable "default_node_pool_min_count" {
+  default = 1
+  type    = number
+}
+variable "default_node_pool_max_count" {
+  default = 3
+  type    = number
+}
+variable "default_node_pool_max_pods" {
+  default = 30
+  type    = number
 }

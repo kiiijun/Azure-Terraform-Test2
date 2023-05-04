@@ -100,13 +100,21 @@ module "vpngw" {
   subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
 }
 module "aks" {
-  source                       = "./modules/kubernetes"
-  cluster_name                 = var.cluster_name
-  dns_prefix                   = lower(var.cluster_name)
-  resource_group_name          = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
-  location                     = var.location
-  default_node_pool_name       = var.default_node_pool_name
-  default_node_pool_node_count = var.default_node_pool_node_count
-  default_node_pool_vm_size    = var.default_node_pool_vm_size
-
+  source                                = "./modules/kubernetes"
+  cluster_name                          = var.cluster_name
+  dns_prefix                            = "${lower(var.cluster_name)}-dns"
+  resource_group_name                   = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
+  location                              = var.location
+  sku_tier                              = var.sku_tier
+  network_plugin                        = var.network_plugin
+  private_cluster_enabled               = var.private_cluster_enabled
+  zones                                 = var.default_node_pool_zones
+  default_node_pool_name                = var.default_node_pool_name
+  default_node_pool_node_count          = var.default_node_pool_node_count
+  default_node_pool_vm_size             = var.default_node_pool_vm_size
+  default_node_pool_enable_auto_scaling = var.default_node_pool_enable_auto_scaling
+  default_node_pool_min_count           = var.default_node_pool_min_count
+  default_node_pool_max_count           = var.default_node_pool_max_count
+  default_node_pool_max_pods            = var.default_node_pool_max_pods
+  vnet_subnet_id                        = module.spoke_network.subnet_ids["aks-subnet"]
 }
