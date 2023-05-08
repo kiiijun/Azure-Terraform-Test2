@@ -162,3 +162,18 @@ variable "default_node_pool_max_pods" {
   default = 30
   type    = number
 }
+
+//acr 변수
+variable "acr_name" {
+  default = "zentestacr"
+  type    = string
+}
+variable "acr_sku" {
+  default = "Premium"
+  type    = string
+}
+variable "acr_admin_enabled" {
+  default = false
+  type    = bool
+}
+

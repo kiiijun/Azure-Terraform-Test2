@@ -74,31 +74,31 @@ module "vnet_peering" {
   peering_name_2_to_1 = "${var.spoke_vnet_name}-to-${var.hub_vnet_name}"
 }
 
-module "firewall" {
-  source              = "./modules/firewall"
-  name                = var.firewall_name
-  resource_group_name = azurerm_resource_group.rg[0].name
-  zones               = var.firewall_zones
-  threat_intel_mode   = var.firewall_threat_intel_mode
-  location            = var.location
-  sku_name            = var.firewall_sku_name
-  sku_tier            = var.firewall_sku_tier
-  pip_name            = "${var.firewall_name}-pip"
-  subnet_id           = module.hub_network.subnet_ids["AzureFirewallSubnet"]
-}
-module "vpngw" {
-  source              = "./modules/virtual_network_gateway"
-  name                = var.vpngw_name
-  resource_group_name = azurerm_resource_group.rg[0].name
-  location            = var.location
-  pip_name            = "${var.vpngw_name}-pip"
-  type                = var.vpngw_type
-  vpn_type            = var.vpngw_vpn_type
-  active_active       = var.vpngw_active_active
-  enable_bgp          = var.vpngw_enable_bgp
-  sku                 = var.vpngw_sku
-  subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
-}
+# module "firewall" {
+#   source              = "./modules/firewall"
+#   name                = var.firewall_name
+#   resource_group_name = azurerm_resource_group.rg[0].name
+#   zones               = var.firewall_zones
+#   threat_intel_mode   = var.firewall_threat_intel_mode
+#   location            = var.location
+#   sku_name            = var.firewall_sku_name
+#   sku_tier            = var.firewall_sku_tier
+#   pip_name            = "${var.firewall_name}-pip"
+#   subnet_id           = module.hub_network.subnet_ids["AzureFirewallSubnet"]
+# }
+# module "vpngw" {
+#   source              = "./modules/virtual_network_gateway"
+#   name                = var.vpngw_name
+#   resource_group_name = azurerm_resource_group.rg[0].name
+#   location            = var.location
+#   pip_name            = "${var.vpngw_name}-pip"
+#   type                = var.vpngw_type
+#   vpn_type            = var.vpngw_vpn_type
+#   active_active       = var.vpngw_active_active
+#   enable_bgp          = var.vpngw_enable_bgp
+#   sku                 = var.vpngw_sku
+#   subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
+# }
 module "aks" {
   source                                = "./modules/kubernetes"
   cluster_name                          = var.cluster_name
@@ -117,4 +117,13 @@ module "aks" {
   default_node_pool_max_count           = var.default_node_pool_max_count
   default_node_pool_max_pods            = var.default_node_pool_max_pods
   vnet_subnet_id                        = module.spoke_network.subnet_ids["aks-subnet"]
+}
+
+module "acr" {
+  source              = "./modules/container_registry"
+  name                = var.acr_name
+  resource_group_name = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
+  location            = var.location
+  sku                 = var.acr_sku
+  admin_enabled       = var.acr_admin_enabled
 }
