@@ -8,3 +8,17 @@ output "kube_config" {
 
   sensitive = true
 }
+output "name" {
+  value       = azurerm_kubernetes_cluster.aks.name
+  description = "Specifies the name of the AKS cluster."
+}
+
+output "id" {
+  value       = azurerm_kubernetes_cluster.aks.id
+  description = "Specifies the resource id of the AKS cluster."
+}
+
+output "kubelet_identity_object_id" {
+  value       = azurerm_kubernetes_cluster.aks.kubelet_identity.0.object_id
+  description = "Specifies the object id of the kubelet identity of the AKS cluster."
+}

@@ -44,7 +44,7 @@ module "hub_network" {
 
 module "spoke_network" {
   source              = "./modules/virtual_network"
-  resource_group_name = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
+  resource_group_name = azurerm_resource_group.rg[1].name
   location            = var.location
   vnet_name           = var.spoke_vnet_name
   address_space       = var.spoke_address_space
@@ -99,6 +99,7 @@ module "vnet_peering" {
 #   sku                 = var.vpngw_sku
 #   subnet_id           = module.hub_network.subnet_ids["GatewaySubnet"]
 # }
+
 module "aks" {
   source                                = "./modules/kubernetes"
   cluster_name                          = var.cluster_name
@@ -122,8 +123,32 @@ module "aks" {
 module "acr" {
   source              = "./modules/container_registry"
   name                = var.acr_name
-  resource_group_name = azurerm_resource_group.rg["${var.resource_group_count}" - 1].name
+  resource_group_name = azurerm_resource_group.rg[1].name
   location            = var.location
   sku                 = var.acr_sku
   admin_enabled       = var.acr_admin_enabled
 }
+
+resource "azurerm_role_assignment" "acr_pull" {
+  role_definition_name             = "AcrPull"
+  scope                            = module.acr.id
+  principal_id                     = module.aks.kubelet_identity_object_id
+  skip_service_principal_aad_check = true
+}
+
+module "acr_private_dns_zone" {
+  source              = "./modules/private_dns_zone"
+  name                = "privatelink.azurecr.io"
+  resource_group_name = azurerm_resource_group.rg[1].name
+  virtual_networks_to_link = {
+    (module.hub_network.name) = {
+      subscription_id     = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.rg[0].name
+    }
+    (module.spoke_network.name) = {
+      subscription_id     = data.azurerm_client_config.current.subscription_id
+      resource_group_name = azurerm_resource_group.rg[1].name
+    }
+  }
+}
+
